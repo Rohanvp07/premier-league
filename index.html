@@ -111,18 +111,19 @@
 
 <div class="controls" id="controls">
 
-    <!-- League -->
+    <!-- Competition -->
     <select id="league" onchange="changeLeague()">
         <option value="epl" selected>Premier League</option>
         <option value="la-liga">La Liga</option>
+        <option value="football">International Football</option>
     </select>
 
 
-    <!-- Home Team -->
+    <!-- Home Team / Nation -->
     <select id="team1"></select>
 
 
-    <!-- Away Team -->
+    <!-- Away Team / Nation -->
     <select id="team2"></select>
 
 
@@ -130,7 +131,7 @@
     <select id="server">
         <option value="stream-1" selected>Server 1</option>
         <option value="stream-2">Server 2</option>
-         <option value="stream-3">Server 3</option>
+        <option value="stream-3">Server 3</option>
     </select>
 
 
@@ -152,10 +153,14 @@
 <script>
 
 /* =====================================
-   TEAMS
+   LEAGUES / NATIONAL TEAMS
 ===================================== */
 
 const leagues = {
+
+    /* =================================
+       PREMIER LEAGUE
+    ================================= */
 
     "epl": [
 
@@ -183,6 +188,11 @@ const leagues = {
 
     ],
 
+
+    /* =================================
+       LA LIGA
+    ================================= */
+
     "la-liga": [
 
         "Alaves",
@@ -205,6 +215,239 @@ const leagues = {
         "Sevilla",
         "Valencia",
         "Villarreal"
+
+    ],
+
+
+    /* =================================
+       INTERNATIONAL FOOTBALL
+    ================================= */
+
+    "football": [
+
+        "Afghanistan",
+        "Albania",
+        "Algeria",
+        "Andorra",
+        "Angola",
+        "Antigua and Barbuda",
+        "Argentina",
+        "Armenia",
+        "Australia",
+        "Austria",
+        "Azerbaijan",
+
+        "Bahamas",
+        "Bahrain",
+        "Bangladesh",
+        "Barbados",
+        "Belarus",
+        "Belgium",
+        "Belize",
+        "Benin",
+        "Bhutan",
+        "Bolivia",
+        "Bosnia and Herzegovina",
+        "Botswana",
+        "Brazil",
+        "Brunei",
+        "Bulgaria",
+        "Burkina Faso",
+        "Burundi",
+
+        "Cabo Verde",
+        "Cambodia",
+        "Cameroon",
+        "Canada",
+        "Central African Republic",
+        "Chad",
+        "Chile",
+        "China",
+        "Chinese Taipei",
+        "Colombia",
+        "Comoros",
+        "Congo",
+        "Cook Islands",
+        "Costa Rica",
+        "Croatia",
+        "Cuba",
+        "Cyprus",
+        "Czech Republic",
+
+        "Democratic Republic of the Congo",
+        "Denmark",
+        "Djibouti",
+        "Dominica",
+        "Dominican Republic",
+
+        "Ecuador",
+        "Egypt",
+        "El Salvador",
+        "England",
+        "Equatorial Guinea",
+        "Eritrea",
+        "Estonia",
+        "Eswatini",
+        "Ethiopia",
+
+        "Faroe Islands",
+        "Fiji",
+        "Finland",
+        "France",
+
+        "Gabon",
+        "Gambia",
+        "Georgia",
+        "Germany",
+        "Ghana",
+        "Greece",
+        "Grenada",
+        "Guatemala",
+        "Guinea",
+        "Guinea-Bissau",
+        "Guyana",
+
+        "Haiti",
+        "Honduras",
+        "Hong Kong",
+        "Hungary",
+
+        "Iceland",
+        "India",
+        "Indonesia",
+        "Iran",
+        "Iraq",
+        "Ireland",
+        "Israel",
+        "Italy",
+        "Ivory Coast",
+
+        "Jamaica",
+        "Japan",
+        "Jordan",
+
+        "Kazakhstan",
+        "Kenya",
+        "Kuwait",
+        "Kyrgyzstan",
+
+        "Laos",
+        "Latvia",
+        "Lebanon",
+        "Lesotho",
+        "Liberia",
+        "Libya",
+        "Liechtenstein",
+        "Lithuania",
+        "Luxembourg",
+
+        "Macau",
+        "Madagascar",
+        "Malawi",
+        "Malaysia",
+        "Maldives",
+        "Mali",
+        "Malta",
+        "Mauritania",
+        "Mauritius",
+        "Mexico",
+        "Moldova",
+        "Monaco",
+        "Mongolia",
+        "Montenegro",
+        "Montserrat",
+        "Morocco",
+        "Mozambique",
+        "Myanmar",
+
+        "Namibia",
+        "Nepal",
+        "Netherlands",
+        "New Zealand",
+        "Nicaragua",
+        "Niger",
+        "Nigeria",
+        "North Korea",
+        "North Macedonia",
+        "Northern Ireland",
+        "Norway",
+
+        "Oman",
+
+        "Pakistan",
+        "Palestine",
+        "Panama",
+        "Papua New Guinea",
+        "Paraguay",
+        "Peru",
+        "Philippines",
+        "Poland",
+        "Portugal",
+        "Puerto Rico",
+
+        "Qatar",
+
+        "Romania",
+        "Russia",
+        "Rwanda",
+
+        "Saint Kitts and Nevis",
+        "Saint Lucia",
+        "Saint Vincent and the Grenadines",
+        "Samoa",
+        "San Marino",
+        "Saudi Arabia",
+        "Scotland",
+        "Senegal",
+        "Serbia",
+        "Seychelles",
+        "Sierra Leone",
+        "Singapore",
+        "Slovakia",
+        "Slovenia",
+        "Solomon Islands",
+        "Somalia",
+        "South Africa",
+        "South Korea",
+        "South Sudan",
+        "Spain",
+        "Sri Lanka",
+        "Sudan",
+        "Suriname",
+        "Sweden",
+        "Switzerland",
+        "Syria",
+
+        "Tahiti",
+        "Taiwan",
+        "Tajikistan",
+        "Tanzania",
+        "Thailand",
+        "Timor-Leste",
+        "Togo",
+        "Tonga",
+        "Trinidad and Tobago",
+        "Tunisia",
+        "Turkiye",
+        "Turkmenistan",
+
+        "Uganda",
+        "Ukraine",
+        "United Arab Emirates",
+        "United States",
+        "Uruguay",
+        "Uzbekistan",
+
+        "Vanuatu",
+        "Venezuela",
+        "Vietnam",
+        "Virgin Islands",
+
+        "Wales",
+        "Yemen",
+
+        "Zambia",
+        "Zimbabwe"
 
     ]
 
@@ -243,10 +486,10 @@ function populateTeams() {
 
 
     team1.innerHTML =
-        `<option value="">Home Team</option>`;
+        `<option value="">Home Team / Nation</option>`;
 
     team2.innerHTML =
-        `<option value="">Away Team</option>`;
+        `<option value="">Away Team / Nation</option>`;
 
 
     teams.forEach(team => {
@@ -276,15 +519,19 @@ function changeLeague() {
 
 
 /* =====================================
-   FORMAT TEAM FOR URL
+   FORMAT TEAM / NATION FOR URL
 ===================================== */
 
 function formatTeam(team) {
 
     return team
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
         .replace(/&/g, "and")
-        .replace(/\s+/g, "-");
+        .replace(/['’]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
 
 }
 
@@ -311,11 +558,40 @@ function loadMatch() {
     }
 
 
-    const streamUrl =
-        `https://embedsports.me/${league.value}/` +
-        `${formatTeam(team1.value)}-vs-` +
-        `${formatTeam(team2.value)}-` +
-        `${server.value}`;
+    let streamUrl;
+
+
+    /* ================================
+       INTERNATIONAL FOOTBALL
+    ================================= */
+
+    if (league.value === "football") {
+
+        streamUrl =
+            `https://embedsports.me/football/` +
+            `${formatTeam(team1.value)}-vs-` +
+            `${formatTeam(team2.value)}-` +
+            `${server.value}`;
+
+    }
+
+
+    /* ================================
+       LEAGUES
+    ================================= */
+
+    else {
+
+        streamUrl =
+            `https://embedsports.me/${league.value}/` +
+            `${formatTeam(team1.value)}-vs-` +
+            `${formatTeam(team2.value)}-` +
+            `${server.value}`;
+
+    }
+
+
+    console.log("Loading stream:", streamUrl);
 
 
     document
