@@ -1,524 +1,2227 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MatchDay - Football</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-* { box-sizing: border-box; }
+    <title>MatchDay - Football</title>
 
-:root {
-    --bg: #080b12;
-    --panel: #121824;
-    --border: rgba(255,255,255,.09);
-    --text: #f5f7fb;
-    --muted: #929db0;
-    --green: #35e58a;
-}
+    <style>
 
-html, body {
-    margin: 0;
-    min-height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Segoe UI", Arial, sans-serif;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-header {
-    padding: 18px 24px;
-    border-bottom: 1px solid var(--border);
-    background: #0c111b;
-}
+        :root {
+            --bg: #07090d;
+            --panel: #10141b;
+            --panel2: #151a23;
+            --border: rgba(255,255,255,0.08);
+            --text: #ffffff;
+            --muted: #8d96a5;
+            --green: #35e58a;
+            --green-dark: #18b967;
+            --red: #ff4d5a;
+            --yellow: #ffc857;
+        }
 
-.header-inner {
-    max-width: 1100px;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
+        body {
+            margin: 0;
+            min-height: 100vh;
 
-.brand {
-    font-size: 22px;
-    font-weight: 800;
-}
+            background:
+                radial-gradient(
+                    circle at 20% 0%,
+                    rgba(53,229,138,0.10),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(52,152,219,0.08),
+                    transparent 30%
+                ),
+                var(--bg);
 
-.brand span { color: var(--green); }
+            color: var(--text);
 
-button, select, input {
-    font: inherit;
-}
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+        }
 
-button { cursor: pointer; }
 
-main {
-    max-width: 1100px;
-    padding: 28px 20px 60px;
-    margin: auto;
-}
+        /* =========================================
+           HEADER
+        ========================================= */
 
-.hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-}
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
 
-h1 { font-size: 30px; margin: 0; }
-.subtitle { color: var(--muted); margin-top: 8px; }
+            backdrop-filter: blur(20px);
 
-.date-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+            background:
+                rgba(7,9,13,0.84);
 
-.date-controls button, .date-controls input {
-    background: var(--panel);
-    color: white;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 12px;
-}
+            border-bottom:
+                1px solid var(--border);
+        }
 
-.date-controls input { max-width: 165px; }
 
-.tabs {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-}
+        .header-inner {
+            max-width: 1250px;
+            margin: auto;
 
-.tab {
-    padding: 12px 17px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: #c1cada;
-    background: var(--panel);
-    font-weight: 650;
-}
+            padding: 18px 24px;
 
-.tab.active {
-    background: var(--green);
-    color: #07130c;
-    border-color: var(--green);
-}
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
-.panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
+            gap: 20px;
+        }
 
-.panel h2 {
-    font-size: 17px;
-    margin: 0 0 16px;
-}
 
-.selectors {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-}
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-select, .play-button {
-    width: 100%;
-    padding: 13px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-}
 
-select {
-    background: #0c111b;
-    color: white;
-}
+        .brand-icon {
+            width: 44px;
+            height: 44px;
 
-.play-button {
-    margin-top: 14px;
-    background: var(--green);
-    color: #06140c;
-    border: none;
-    font-weight: 800;
-}
+            border-radius: 13px;
 
-.play-button:hover { filter: brightness(1.08); }
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-.section-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 14px;
-}
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--green),
+                    #14a765
+                );
 
-.section-heading h2 { margin: 0; font-size: 19px; }
+            color: #06100a;
 
-#matchList {
-    display: grid;
-    gap: 12px;
-}
+            font-size: 22px;
 
-.match-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 17px;
-    display: grid;
-    grid-template-columns: 100px minmax(0, 1fr) 145px;
-    gap: 16px;
-    align-items: center;
-}
+            box-shadow:
+                0 8px 25px
+                rgba(53,229,138,0.2);
+        }
 
-.match-time {
-    font-weight: 800;
-    font-size: 18px;
-}
 
-.match-time small {
-    display: block;
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 400;
-    margin-top: 5px;
-}
+        .brand-text h1 {
+            margin: 0;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+        }
 
-.match-teams { min-width: 0; }
 
-.team-name {
-    font-size: 14px;
-    font-weight: 700;
-    overflow-wrap: anywhere;
-}
+        .brand-text span {
+            display: block;
 
-.vs {
-    color: var(--muted);
-    font-size: 11px;
-    margin: 5px 0;
-}
+            color: var(--muted);
 
-.competition {
-    color: var(--muted);
-    font-size: 12px;
-    margin-top: 7px;
-}
+            font-size: 12px;
 
-.watch-button {
-    background: var(--green);
-    border: none;
-    color: #06140c;
-    border-radius: 10px;
-    padding: 12px;
-    font-weight: 800;
-}
+            margin-top: 2px;
+        }
 
-.empty {
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 32px 20px;
-    text-align: center;
-    color: var(--muted);
-    background: var(--panel);
-}
 
-#player {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: black;
-}
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-#player.active { display: block; }
 
-#matchFrame {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-}
+        .icon-button {
+            border: 1px solid var(--border);
 
-.close-player {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 101;
-    width: 44px;
-    height: 44px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(0,0,0,.8);
-    color: white;
-    font-size: 22px;
-}
+            background:
+                rgba(255,255,255,0.04);
 
-@media (max-width: 700px) {
-    main { padding: 22px 13px 40px; }
-    h1 { font-size: 25px; }
-    .selectors { grid-template-columns: 1fr; }
-    .match-card {
-        grid-template-columns: 70px minmax(0, 1fr);
-        gap: 12px;
-    }
-    .watch-button {
-        grid-column: 1 / -1;
-    }
-    .date-controls { flex-wrap: wrap; }
-}
-</style>
+            color: white;
+
+            border-radius: 11px;
+
+            padding: 10px 13px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .icon-button:hover {
+            background:
+                rgba(255,255,255,0.09);
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        main {
+            max-width: 1250px;
+
+            margin: auto;
+
+            padding:
+                28px 24px 60px;
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .hero {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: flex-end;
+
+            gap: 20px;
+
+            margin-bottom: 24px;
+        }
+
+
+        .hero h2 {
+            margin: 0;
+
+            font-size: 34px;
+
+            letter-spacing: -1px;
+        }
+
+
+        .hero p {
+            margin: 7px 0 0;
+
+            color: var(--muted);
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================
+           DATE CONTROLS
+        ========================================= */
+
+        .date-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+
+        .date-navigation {
+            display: flex;
+            align-items: center;
+
+            background:
+                var(--panel);
+
+            border:
+                1px solid var(--border);
+
+            padding: 6px;
+
+            border-radius: 14px;
+        }
+
+
+        .date-navigation button {
+            border: none;
+
+            background: transparent;
+
+            color: white;
+
+            width: 38px;
+            height: 38px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+            transition: 0.2s;
+        }
+
+
+        .date-navigation button:hover {
+            background:
+                rgba(255,255,255,0.07);
+        }
+
+
+        .date-display {
+            min-width: 145px;
+
+            text-align: center;
+
+            padding: 0 5px;
+        }
+
+
+        .date-display strong {
+            display: block;
+
+            font-size: 14px;
+        }
+
+
+        .date-display span {
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+
+        /* REAL CALENDAR BUTTON */
+
+        .calendar-button {
+            position: relative;
+
+            width: 46px;
+            height: 46px;
+
+            border-radius: 13px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--panel);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .calendar-button:hover {
+            border-color:
+                rgba(53,229,138,0.4);
+
+            background:
+                var(--panel2);
+        }
+
+
+        #calendarInput {
+            position: absolute;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            opacity: 0;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           LEAGUE TABS
+        ========================================= */
+
+        .league-tabs {
+            display: flex;
+
+            gap: 10px;
+
+            overflow-x: auto;
+
+            padding-bottom: 5px;
+
+            margin-bottom: 24px;
+        }
+
+
+        .league-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+
+        .league-tab {
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            padding:
+                12px 17px;
+
+            border-radius: 13px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--panel);
+
+            color: #b5bdca;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            font-weight: 600;
+
+            font-size: 13px;
+        }
+
+
+        .league-tab:hover {
+            background:
+                var(--panel2);
+
+            color: white;
+        }
+
+
+        .league-tab.active {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--green),
+                    #21c879
+                );
+
+            border-color: transparent;
+
+            color: #041009;
+
+            box-shadow:
+                0 8px 25px
+                rgba(53,229,138,0.15);
+        }
+
+
+        .league-icon {
+            font-size: 17px;
+        }
+
+
+        /* =========================================
+           TOOLBAR
+        ========================================= */
+
+        .toolbar {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .section-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .section-title h3 {
+            margin: 0;
+
+            font-size: 18px;
+        }
+
+
+        .match-count {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            background:
+                rgba(255,255,255,0.05);
+
+            padding:
+                5px 9px;
+
+            border-radius: 20px;
+        }
+
+
+        .search {
+            width: 230px;
+
+            padding:
+                11px 14px;
+
+            border-radius: 11px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                var(--panel);
+
+            color: white;
+
+            outline: none;
+        }
+
+
+        .search::placeholder {
+            color: #68717f;
+        }
+
+
+        .search:focus {
+            border-color:
+                rgba(53,229,138,0.5);
+        }
+
+
+        /* =========================================
+           MATCH LIST
+        ========================================= */
+
+        #matches {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+
+        .match-card {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.045),
+                    rgba(255,255,255,0.018)
+                );
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 16px;
+
+            padding:
+                16px 18px;
+
+            display: grid;
+
+            grid-template-columns:
+                85px
+                1fr
+                170px;
+
+            align-items: center;
+
+            gap: 20px;
+
+            transition:
+                transform 0.2s,
+                border-color 0.2s,
+                background 0.2s;
+        }
+
+
+        .match-card:hover {
+            transform:
+                translateY(-2px);
+
+            border-color:
+                rgba(53,229,138,0.25);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.07),
+                    rgba(255,255,255,0.025)
+                );
+        }
+
+
+        /* =========================================
+           TIME
+        ========================================= */
+
+        .match-time {
+            text-align: center;
+        }
+
+
+        .time {
+            font-size: 20px;
+
+            font-weight: 750;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .timezone {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 3px;
+        }
+
+
+        /* =========================================
+           TEAMS
+        ========================================= */
+
+        .teams {
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                30px
+                1fr;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .team {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            min-width: 0;
+        }
+
+
+        .team.away {
+            justify-content: flex-end;
+
+            text-align: right;
+        }
+
+
+        .team-logo {
+            width: 38px;
+            height: 38px;
+
+            object-fit: contain;
+
+            flex-shrink: 0;
+
+            background:
+                rgba(255,255,255,0.04);
+
+            border-radius: 9px;
+
+            padding: 4px;
+        }
+
+
+        .team-name {
+            font-weight: 650;
+
+            font-size: 14px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        .score {
+            font-size: 19px;
+
+            font-weight: 800;
+
+            margin-top: 2px;
+        }
+
+
+        .versus {
+            color: #596271;
+
+            font-size: 11px;
+
+            text-align: center;
+        }
+
+
+        /* =========================================
+           STATUS
+        ========================================= */
+
+        .status {
+            margin-bottom: 7px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .status.live {
+            color: var(--red);
+        }
+
+
+        .status.upcoming {
+            color: var(--muted);
+        }
+
+
+        .status.finished {
+            color: #6f7785;
+        }
+
+
+        .live-dot {
+            display: inline-block;
+
+            width: 6px;
+            height: 6px;
+
+            background:
+                var(--red);
+
+            border-radius: 50%;
+
+            margin-right: 5px;
+
+            animation:
+                pulse 1.2s infinite;
+        }
+
+
+        @keyframes pulse {
+
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.35;
+                transform: scale(0.75);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+
+        /* =========================================
+           WATCH BUTTON
+        ========================================= */
+
+        .watch-button {
+            width: 100%;
+
+            padding:
+                12px 14px;
+
+            border-radius: 11px;
+
+            border: none;
+
+            background:
+                var(--green);
+
+            color: #031009;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .watch-button:hover {
+            background:
+                #59f0a1;
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(53,229,138,0.18);
+        }
+
+
+        .watch-button.secondary {
+            background:
+                rgba(255,255,255,0.07);
+
+            color: #dfe4ea;
+        }
+
+
+        /* =========================================
+           EMPTY
+        ========================================= */
+
+        .empty {
+            text-align: center;
+
+            padding:
+                70px 20px;
+
+            background:
+                var(--panel);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 18px;
+        }
+
+
+        .empty-icon {
+            font-size: 45px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .empty h3 {
+            margin:
+                0 0 7px;
+
+            font-size: 19px;
+        }
+
+
+        .empty p {
+            margin: 0;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================
+           LOADING
+        ========================================= */
+
+        .loading {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 10px;
+
+            min-height: 220px;
+
+            color: var(--muted);
+        }
+
+
+        .spinner {
+            width: 19px;
+            height: 19px;
+
+            border:
+                2px solid rgba(255,255,255,0.12);
+
+            border-top-color:
+                var(--green);
+
+            border-radius: 50%;
+
+            animation:
+                spin 0.7s linear infinite;
+        }
+
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* =========================================
+           PLAYER
+        ========================================= */
+
+        #player {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 500;
+
+            display: none;
+
+            background: #000;
+        }
+
+
+        #player.active {
+            display: block;
+        }
+
+
+        #player iframe {
+            position: absolute;
+
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            border: none;
+        }
+
+
+        .close-player {
+            position: absolute;
+
+            top: 18px;
+            right: 18px;
+
+            z-index: 510;
+
+            width: 44px;
+            height: 44px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background:
+                rgba(0,0,0,0.75);
+
+            color: white;
+
+            font-size: 21px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 850px) {
+
+            .hero {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+
+            .date-area {
+                align-self: flex-start;
+            }
+
+
+            .match-card {
+                grid-template-columns:
+                    70px
+                    1fr;
+
+                gap: 12px;
+            }
+
+
+            .match-action {
+                grid-column:
+                    1 / -1;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            main {
+                padding:
+                    20px 13px 40px;
+            }
+
+
+            .header-inner {
+                padding:
+                    14px 15px;
+            }
+
+
+            .hero h2 {
+                font-size: 27px;
+            }
+
+
+            .toolbar {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+
+            .search {
+                width: 100%;
+            }
+
+
+            .match-card {
+                grid-template-columns:
+                    65px
+                    1fr;
+
+                padding: 14px;
+            }
+
+
+            .team-name {
+                font-size: 13px;
+            }
+
+
+            .team-logo {
+                width: 32px;
+                height: 32px;
+            }
+
+
+            .time {
+                font-size: 17px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
+
 <body>
+
+
 <header>
+
     <div class="header-inner">
-        <div class="brand">⚽ Match<span>Day</span></div>
-        <button class="tab" onclick="resetDate()">📅 Today</button>
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ⚽
+            </div>
+
+            <div class="brand-text">
+
+                <h1>MatchDay</h1>
+
+                <span>
+                    Football Schedule & Match Centre
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <button
+                class="icon-button"
+                onclick="goToday()">
+
+                📅 Today
+
+            </button>
+
+
+            <button
+                class="icon-button"
+                onclick="loadMatches()">
+
+                ↻ Refresh
+
+            </button>
+
+        </div>
+
     </div>
+
 </header>
 
+
+
 <main>
+
+
+    <!-- HERO -->
+
     <section class="hero">
+
         <div>
-            <h1>Football Match Centre</h1>
-            <div class="subtitle">Choose a competition, find a match and open its stream.</div>
+
+            <h2 id="pageTitle">
+                Today's Football
+            </h2>
+
+            <p id="pageSubtitle">
+                Fixtures and match information
+            </p>
+
         </div>
 
-        <div class="date-controls">
-            <button onclick="changeDate(-1)" aria-label="Previous day">‹</button>
-            <input type="date" id="matchDate" onchange="renderMatches()">
-            <button onclick="changeDate(1)" aria-label="Next day">›</button>
+
+        <div class="date-area">
+
+
+            <!-- Previous / Date / Next -->
+
+            <div class="date-navigation">
+
+                <button
+                    onclick="changeDate(-1)"
+                    title="Previous day">
+
+                    ‹
+
+                </button>
+
+
+                <div class="date-display">
+
+                    <strong id="dateText">
+                        Today
+                    </strong>
+
+                    <span id="fullDate">
+                        —
+                    </span>
+
+                </div>
+
+
+                <button
+                    onclick="changeDate(1)"
+                    title="Next day">
+
+                    ›
+
+                </button>
+
+            </div>
+
+
+            <!-- Calendar -->
+
+            <label
+                class="calendar-button"
+                title="Choose date">
+
+                📅
+
+                <input
+                    type="date"
+                    id="calendarInput"
+                    onchange="calendarChanged(event)">
+
+            </label>
+
         </div>
+
     </section>
 
-    <nav class="tabs" aria-label="Football competitions">
-        <button class="tab active" data-league="epl" onclick="selectLeague('epl')">
-            🏴 Premier League
-        </button>
-        <button class="tab" data-league="la-liga" onclick="selectLeague('la-liga')">
-            🇪🇸 La Liga
-        </button>
-        <button class="tab" data-league="champions-league" onclick="selectLeague('champions-league')">
-            ⭐ UEFA Champions League
-        </button>
-        <button class="tab" data-league="football" onclick="selectLeague('football')">
-            🌍 International Football
-        </button>
-    </nav>
 
-    <section class="panel">
-        <h2>Choose a match manually</h2>
-        <div class="selectors">
-            <select id="team1" aria-label="Home team"></select>
-            <select id="team2" aria-label="Away team"></select>
-            <select id="server" aria-label="Stream server">
-                <option value="stream-1">Server 1</option>
-                <option value="stream-2">Server 2</option>
-                <option value="stream-3">Server 3</option>
-            </select>
+
+    <!-- LEAGUES -->
+
+    <div class="league-tabs">
+
+
+        <button
+            class="league-tab active"
+            data-league="epl"
+            onclick="selectLeague('epl')">
+
+            <span class="league-icon">
+                🏴
+            </span>
+
+            Premier League
+
+        </button>
+
+
+        <button
+            class="league-tab"
+            data-league="laliga"
+            onclick="selectLeague('laliga')">
+
+            <span class="league-icon">
+                🇪🇸
+            </span>
+
+            La Liga
+
+        </button>
+
+
+        <button
+            class="league-tab"
+            data-league="ucl"
+            onclick="selectLeague('ucl')">
+
+            <span class="league-icon">
+                ⭐
+            </span>
+
+            UEFA Champions League
+
+        </button>
+
+
+        <button
+            class="league-tab"
+            data-league="nations"
+            onclick="selectLeague('nations')">
+
+            <span class="league-icon">
+                🇪🇺
+            </span>
+
+            UEFA Nations League
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+        <div class="section-title">
+
+            <h3 id="competitionTitle">
+                Premier League
+            </h3>
+
+            <span
+                class="match-count"
+                id="matchCount">
+
+                0 matches
+
+            </span>
+
         </div>
-        <button class="play-button" onclick="loadMatch()">▶ Play Selected Match</button>
-    </section>
 
-    <div class="section-heading">
-        <h2 id="competitionTitle">Premier League</h2>
-        <span id="dateLabel" class="subtitle"></span>
+
+        <input
+            class="search"
+            id="search"
+            type="text"
+            placeholder="Search teams..."
+            oninput="filterMatches()">
+
     </div>
 
-    <div id="matchList">
-        <div class="empty">Select a competition and date to see matches.</div>
+
+
+    <!-- MATCHES -->
+
+    <div id="matches">
+
+        <div class="loading">
+
+            <div class="spinner"></div>
+
+            Loading fixtures...
+
+        </div>
+
     </div>
+
+
 </main>
 
+
+
+<!-- PLAYER -->
+
 <div id="player">
-    <button class="close-player" onclick="closePlayer()" aria-label="Close player">×</button>
-    <iframe id="matchFrame" allowfullscreen allowtransparency
-        scrolling="no" referrerpolicy="unsafe-url"></iframe>
+
+    <button
+        class="close-player"
+        onclick="closePlayer()">
+
+        ✕
+
+    </button>
+
+
+    <iframe
+        id="matchFrame"
+        allowfullscreen
+        allow="autoplay; fullscreen">
+    </iframe>
+
 </div>
 
+
+
 <script>
-const leagues = {
-    "epl": [
-        "Arsenal", "Aston Villa", "Bournemouth", "Brentford",
-        "Brighton and Hove Albion", "Burnley", "Chelsea",
-        "Crystal Palace", "Everton", "Fulham", "Leeds United",
-        "Liverpool", "Manchester City", "Manchester United",
-        "Newcastle United", "Nottingham Forest", "Sunderland",
-        "Tottenham Hotspur", "West Ham United", "Wolverhampton Wanderers"
-    ],
 
-    "la-liga": [
-        "Alaves", "Athletic Bilbao", "Atletico Madrid", "Barcelona",
-        "Celta Vigo", "Elche", "Espanyol", "Getafe", "Girona",
-        "Levante", "Mallorca", "Osasuna", "Rayo Vallecano",
-        "Real Betis", "Real Madrid", "Real Oviedo", "Real Sociedad",
-        "Sevilla", "Valencia", "Villarreal"
-    ],
 
-    "champions-league": [
-        "Arsenal", "Atletico Madrid", "Barcelona", "Bayern Munich",
-        "Bodoe Glimt", "Borussia Dortmund", "Club Brugge",
-        "Como", "Fenerbahce", "Galatasaray", "Inter Milan",
-        "LASK", "Lens", "Lille", "Liverpool", "Manchester City",
-        "Manchester United", "Napoli", "Paris Saint Germain",
-        "PSV Eindhoven", "Real Betis", "Real Madrid", "Roma",
-        "Slavia Prague", "Sporting CP", "Villarreal"
-    ],
+/* =====================================================
+   CONFIGURATION
+===================================================== */
 
-    "football": [
-        "Argentina", "Australia", "Austria", "Belgium", "Brazil",
-        "Canada", "Chile", "China", "Colombia", "Croatia",
-        "Czechia", "Denmark", "Egypt", "England", "Finland",
-        "France", "Germany", "Ghana", "Greece", "India",
-        "Indonesia", "Iran", "Iraq", "Ireland", "Italy",
-        "Ivory Coast", "Japan", "Mexico", "Morocco",
-        "Netherlands", "New Zealand", "Nigeria", "Northern Ireland",
-        "Norway", "Poland", "Portugal", "Qatar", "Romania",
-        "Saudi Arabia", "Scotland", "Senegal", "Serbia",
-        "South Africa", "South Korea", "Spain", "Sweden",
-        "Switzerland", "Turkey", "Ukraine", "United States", "Uruguay", "Wales"
-    ]
+const API_BASE =
+    "https://site.api.espn.com/apis/site/v2/sports/soccer";
+
+
+const competitions = {
+
+    epl: {
+
+        name: "Premier League",
+
+        code: "eng.1"
+
+    },
+
+    laliga: {
+
+        name: "La Liga",
+
+        code: "esp.1"
+
+    },
+
+    nations: {
+
+        name: "UEFA Nations League",
+
+        code: "uefa.nations"
+
+    },
+
+    ucl: {
+
+        name: "UEFA Champions League",
+
+        code: "uefa.champions"
+
+    }
+
 };
 
-const leagueNames = {
-    "epl": "Premier League",
-    "la-liga": "La Liga",
-    "champions-league": "UEFA Champions League",
-    "football": "International Football"
-};
+
+/* =====================================================
+   STATE
+===================================================== */
 
 let currentLeague = "epl";
 
-const team1 = document.getElementById("team1");
-const team2 = document.getElementById("team2");
-const server = document.getElementById("server");
-const matchDate = document.getElementById("matchDate");
-const matchList = document.getElementById("matchList");
+let selectedDate = new Date();
 
-function formatTeam(team) {
-    const specialNames = {
-        "Brighton and Hove Albion": "brighton-hove-albion",
-        "Paris Saint Germain": "paris-saint-germain",
-        "Bodoe Glimt": "bodo-glimt",
-        "Inter Milan": "inter-milan"
-    };
+let allMatches = [];
 
-    if (specialNames[team]) return specialNames[team];
 
-    return team.toLowerCase()
-        .replace(/&/g, "and")
-        .replace(/['’]/g, "")
-        .replace(/[^a-z0-9\s-]/g, "")
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-");
+/* =====================================================
+   DOM
+===================================================== */
+
+const matchesContainer =
+    document.getElementById("matches");
+
+const searchInput =
+    document.getElementById("search");
+
+const matchCount =
+    document.getElementById("matchCount");
+
+const competitionTitle =
+    document.getElementById("competitionTitle");
+
+const pageTitle =
+    document.getElementById("pageTitle");
+
+const pageSubtitle =
+    document.getElementById("pageSubtitle");
+
+const dateText =
+    document.getElementById("dateText");
+
+const fullDate =
+    document.getElementById("fullDate");
+
+const calendarInput =
+    document.getElementById("calendarInput");
+
+
+/* =====================================================
+   DATE HELPERS
+===================================================== */
+
+function pad(number) {
+
+    return String(number)
+        .padStart(2, "0");
+
 }
 
-function populateTeams() {
-    const teams = leagues[currentLeague];
 
-    team1.replaceChildren(new Option("Select home team", ""));
-    team2.replaceChildren(new Option("Select away team", ""));
+function getDateString(date) {
 
-    teams.forEach(team => {
-        team1.add(new Option(team, team));
-        team2.add(new Option(team, team));
-    });
+    return (
+        date.getFullYear() +
+        pad(date.getMonth() + 1) +
+        pad(date.getDate())
+    );
+
 }
+
+
+function getInputDateString(date) {
+
+    return (
+        date.getFullYear() +
+        "-" +
+        pad(date.getMonth() + 1) +
+        "-" +
+        pad(date.getDate())
+    );
+
+}
+
+
+function isToday(date) {
+
+    const today = new Date();
+
+    return (
+        date.getFullYear() === today.getFullYear() &&
+        date.getMonth() === today.getMonth() &&
+        date.getDate() === today.getDate()
+    );
+
+}
+
+
+function updateDateUI() {
+
+    fullDate.textContent =
+        selectedDate.toLocaleDateString(
+            "en-GB",
+            {
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+
+    calendarInput.value =
+        getInputDateString(selectedDate);
+
+
+    if (isToday(selectedDate)) {
+
+        dateText.textContent =
+            "Today";
+
+        pageTitle.textContent =
+            "Today's Football";
+
+    }
+
+    else {
+
+        dateText.textContent =
+            selectedDate.toLocaleDateString(
+                "en-GB",
+                {
+                    weekday: "long"
+                }
+            );
+
+        pageTitle.textContent =
+            "Football Fixtures";
+
+    }
+
+}
+
+
+function changeDate(amount) {
+
+    selectedDate.setDate(
+        selectedDate.getDate() + amount
+    );
+
+    updateDateUI();
+
+    loadMatches();
+
+}
+
+
+function calendarChanged(event) {
+
+    if (!event.target.value) {
+        return;
+    }
+
+
+    const parts =
+        event.target.value.split("-");
+
+
+    selectedDate =
+        new Date(
+            Number(parts[0]),
+            Number(parts[1]) - 1,
+            Number(parts[2])
+        );
+
+
+    updateDateUI();
+
+    loadMatches();
+
+}
+
+
+function goToday() {
+
+    selectedDate = new Date();
+
+    updateDateUI();
+
+    loadMatches();
+
+}
+
+
+/* =====================================================
+   LEAGUE
+===================================================== */
 
 function selectLeague(league) {
+
     currentLeague = league;
 
-    document.querySelectorAll("[data-league]").forEach(button => {
-        button.classList.toggle("active", button.dataset.league === league);
-    });
 
-    document.getElementById("competitionTitle").textContent = leagueNames[league];
-    populateTeams();
-    renderMatches();
+    document
+        .querySelectorAll(".league-tab")
+        .forEach(tab => {
+
+            tab.classList.toggle(
+                "active",
+                tab.dataset.league === league
+            );
+
+        });
+
+
+    competitionTitle.textContent =
+        competitions[league].name;
+
+
+    searchInput.value = "";
+
+
+    loadMatches();
+
 }
 
-function getStreamUrl(home, away, selectedServer) {
-    const path = currentLeague === "champions-league" ||
-                 currentLeague === "football"
-        ? "football"
-        : currentLeague;
 
-    return `https://embedsports.me/${path}/${formatTeam(home)}-vs-${formatTeam(away)}-${selectedServer}`;
-}
+/* =====================================================
+   LOAD FIXTURES
+===================================================== */
 
-function loadMatch() {
-    if (!team1.value || !team2.value) {
-        alert("Please select both teams.");
-        return;
+async function loadMatches() {
+
+    const competition =
+        competitions[currentLeague];
+
+
+    matchesContainer.innerHTML = `
+
+        <div class="loading">
+
+            <div class="spinner"></div>
+
+            Loading ${competition.name}...
+
+        </div>
+
+    `;
+
+
+    const date =
+        getDateString(selectedDate);
+
+
+    const url =
+        `${API_BASE}/${competition.code}/scoreboard?dates=${date}`;
+
+
+    try {
+
+        const response =
+            await fetch(url);
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load fixtures"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        allMatches =
+            data.events || [];
+
+
+        renderMatches(allMatches);
+
     }
 
-    if (team1.value === team2.value) {
-        alert("Please select two different teams.");
-        return;
+    catch (error) {
+
+        console.error(error);
+
+
+        matchesContainer.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Couldn't load fixtures
+                </h3>
+
+                <p>
+                    Check your internet connection
+                    and try again.
+                </p>
+
+            </div>
+
+        `;
+
+
+        matchCount.textContent =
+            "Unavailable";
+
     }
 
-    openPlayer(getStreamUrl(team1.value, team2.value, server.value));
 }
 
-function openPlayer(url) {
-    document.getElementById("matchFrame").src = url;
-    document.getElementById("player").classList.add("active");
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderMatches(matches) {
+
+    if (!matches.length) {
+
+        matchesContainer.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🗓️
+                </div>
+
+                <h3>
+                    No matches scheduled
+                </h3>
+
+                <p>
+                    There are no
+                    ${competitions[currentLeague].name}
+                    fixtures on this date.
+                </p>
+
+            </div>
+
+        `;
+
+
+        matchCount.textContent =
+            "0 matches";
+
+        return;
+
+    }
+
+
+    const sorted =
+        [...matches].sort(
+            (a, b) =>
+                new Date(a.date) -
+                new Date(b.date)
+        );
+
+
+    matchCount.textContent =
+        `${sorted.length} ${
+            sorted.length === 1
+                ? "match"
+                : "matches"
+        }`;
+
+
+    matchesContainer.innerHTML =
+        sorted
+            .map(createMatchCard)
+            .join("");
+
 }
+
+
+/* =====================================================
+   MATCH CARD
+===================================================== */
+
+function createMatchCard(event) {
+
+    const competition =
+        event.competitions?.[0];
+
+
+    if (!competition) {
+        return "";
+    }
+
+
+    const competitors =
+        competition.competitors || [];
+
+
+    const home =
+        competitors.find(
+            c => c.homeAway === "home"
+        );
+
+
+    const away =
+        competitors.find(
+            c => c.homeAway === "away"
+        );
+
+
+    if (!home || !away) {
+        return "";
+    }
+
+
+    const homeName =
+        home.team?.displayName ||
+        home.team?.name ||
+        "Home";
+
+
+    const awayName =
+        away.team?.displayName ||
+        away.team?.name ||
+        "Away";
+
+
+    const homeLogo =
+        home.team?.logo || "";
+
+
+    const awayLogo =
+        away.team?.logo || "";
+
+
+    const state =
+        event.status?.type?.state || "pre";
+
+
+    const detail =
+        event.status?.type?.detail || "";
+
+
+    const isLive =
+        state === "in";
+
+
+    const isFinished =
+        state === "post";
+
+
+    const time =
+        formatUKTime(event.date);
+
+
+    let statusHTML;
+
+
+    if (isLive) {
+
+        statusHTML = `
+
+            <div class="status live">
+
+                <span class="live-dot"></span>
+
+                LIVE
+
+            </div>
+
+        `;
+
+    }
+
+    else if (isFinished) {
+
+        statusHTML = `
+
+            <div class="status finished">
+                FT
+            </div>
+
+        `;
+
+    }
+
+    else {
+
+        statusHTML = `
+
+            <div class="status upcoming">
+                ${escapeHTML(detail || "Upcoming")}
+            </div>
+
+        `;
+
+    }
+
+
+    const scoreHTML =
+        (isLive || isFinished)
+            ? `
+
+                <div class="score">
+                    ${home.score ?? "-"}
+                    -
+                    ${away.score ?? "-"}
+                </div>
+
+              `
+            : "";
+
+
+    return `
+
+        <article class="match-card">
+
+
+            <!-- TIME -->
+
+            <div class="match-time">
+
+                <div class="time">
+                    ${time}
+                </div>
+
+                <div class="timezone">
+                    UK TIME
+                </div>
+
+            </div>
+
+
+            <!-- TEAMS -->
+
+            <div class="teams">
+
+
+                <div class="team">
+
+                    ${
+                        homeLogo
+                            ? `
+                                <img
+                                    class="team-logo"
+                                    src="${escapeAttribute(homeLogo)}"
+                                    alt=""
+                                >
+                              `
+                            : ""
+                    }
+
+
+                    <div>
+
+                        <div class="team-name">
+                            ${escapeHTML(homeName)}
+                        </div>
+
+                        ${scoreHTML}
+
+                    </div>
+
+                </div>
+
+
+                <div class="versus">
+                    VS
+                </div>
+
+
+                <div class="team away">
+
+                    <div>
+
+                        <div class="team-name">
+                            ${escapeHTML(awayName)}
+                        </div>
+
+                        ${scoreHTML}
+
+                    </div>
+
+
+                    ${
+                        awayLogo
+                            ? `
+                                <img
+                                    class="team-logo"
+                                    src="${escapeAttribute(awayLogo)}"
+                                    alt=""
+                                >
+                              `
+                            : ""
+                    }
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <div class="match-action">
+
+                ${statusHTML}
+
+
+                <button
+                    class="watch-button"
+                    onclick='watchMatch(
+                        ${JSON.stringify(homeName)},
+                        ${JSON.stringify(awayName)},
+                        ${JSON.stringify(currentLeague)}
+                    )'>
+
+                    ▶ WATCH NOW
+
+                </button>
+
+            </div>
+
+
+        </article>
+
+    `;
+
+}
+
+
+/* =====================================================
+   WATCH MATCH
+===================================================== */
+
+function watchMatch(
+    homeTeam,
+    awayTeam,
+    league
+) {
+
+    /*
+        This is the only function you need to
+        connect to your authorised stream provider.
+
+        Example:
+
+        const url =
+            getAuthorizedStreamUrl(
+                league,
+                homeTeam,
+                awayTeam
+            );
+
+        document.getElementById("matchFrame").src = url;
+
+        document
+            .getElementById("player")
+            .classList.add("active");
+    */
+
+
+    const url =
+        getAuthorizedStreamUrl(
+            league,
+            homeTeam,
+            awayTeam
+        );
+
+
+    if (!url) {
+
+        alert(
+            "No authorised stream is configured for this match."
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("matchFrame")
+        .src = url;
+
+
+    document
+        .getElementById("player")
+        .classList.add("active");
+
+}
+
+
+/* =====================================================
+   STREAM URL
+===================================================== */
+
+function getAuthorizedStreamUrl(
+    league,
+    homeTeam,
+    awayTeam
+) {
+
+    const leaguePath = {
+        epl: "epl",
+        laliga: "la-liga",
+        nations: "football",
+        ucl: "football"
+    };
+
+    const path = leaguePath[league];
+
+    if (!path) {
+        return null;
+    }
+
+    function formatTeam(team) {
+        return team
+            .toLowerCase()
+            .replace(/&/g, "and")
+            .replace(/\s+/g, "-");
+    }
+
+    const home = formatTeam(homeTeam);
+    const away = formatTeam(awayTeam);
+
+    return `https://embedsports.me/${path}/${home}-vs-${away}-stream-1`;
+}
+
+/* =====================================================
+   CLOSE PLAYER
+===================================================== */
 
 function closePlayer() {
-    document.getElementById("matchFrame").src = "";
-    document.getElementById("player").classList.remove("active");
+
+    document
+        .getElementById("matchFrame")
+        .src = "";
+
+    document
+        .getElementById("player")
+        .classList.remove("active");
+
 }
 
-function changeDate(days) {
-    const parts = matchDate.value.split("-").map(Number);
-    const date = new Date(parts[0], parts[1] - 1, parts[2]);
-    date.setDate(date.getDate() + days);
-    matchDate.value = toDateInput(date);
-    renderMatches();
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function filterMatches() {
+
+    const query =
+        searchInput.value
+            .toLowerCase()
+            .trim();
+
+
+    if (!query) {
+
+        renderMatches(allMatches);
+
+        return;
+
+    }
+
+
+    const filtered =
+        allMatches.filter(event => {
+
+            const competitors =
+                event.competitions?.[0]
+                    ?.competitors || [];
+
+
+            return competitors.some(
+                team =>
+                    team.team?.displayName
+                        ?.toLowerCase()
+                        .includes(query)
+            );
+
+        });
+
+
+    renderMatches(filtered);
+
 }
 
-function toDateInput(date) {
-    const pad = n => String(n).padStart(2, "0");
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+
+/* =====================================================
+   UK TIME
+===================================================== */
+
+function formatUKTime(dateString) {
+
+    return new Intl.DateTimeFormat(
+        "en-GB",
+        {
+            timeZone: "Europe/London",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+        }
+    ).format(
+        new Date(dateString)
+    );
+
 }
 
-function resetDate() {
-    matchDate.value = toDateInput(new Date());
-    renderMatches();
+
+/* =====================================================
+   HTML SAFETY
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
 }
 
-/*
- * This page currently supports manual match selection.
- * To populate a real timetable, connect a fixtures API.
- * The stream URL pattern alone cannot supply fixture dates
- * or determine which matches are scheduled on a given day.
- */
-function renderMatches() {
-    document.getElementById("dateLabel").textContent = matchDate.value;
 
-    matchList.innerHTML = `
-        <div class="empty">
-            <div style="font-size:32px;margin-bottom:10px">📅</div>
-            <strong>No automatic fixtures source connected</strong>
-            <p>Choose the teams above and click “Play Selected Match”.</p>
-            <p>Selected competition: ${leagueNames[currentLeague]}</p>
-            <p>Selected date: ${matchDate.value}</p>
-        </div>
-    `;
+function escapeAttribute(value) {
+
+    return String(value ?? "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "&quot;");
+
 }
 
-matchDate.value = toDateInput(new Date());
-populateTeams();
-renderMatches();
+
+/* =====================================================
+   AUTO REFRESH
+===================================================== */
+
+setInterval(
+    loadMatches,
+    60000
+);
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+updateDateUI();
+
+loadMatches();
+
 </script>
+
 </body>
+
 </html>
